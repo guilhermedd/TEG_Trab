@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #define size 150
+// Alunos: Guilherme Diel e Luigi Belló Boscato
 Flower *(cria)()
 {
     // Tenta abrir arquivo
