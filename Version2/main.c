@@ -4,7 +4,8 @@
 #include <math.h>
 #define size 150
 // Alunos: Guilherme Diel e Luigi Belló Boscato
-Flower *(cria)()
+
+struct create *cria()
 {
     // Tenta abrir arquivo
     FILE *fp = fopen("grafo.txt", "r");
@@ -15,21 +16,21 @@ Flower *(cria)()
 
     int n_vertices;
     fscanf(fp, "%d", &n_vertices);
-    Flower *flowers = malloc(sizeof(Flower));
+    struct Flower *flowers = malloc(sizeof(struct Flower));
     flowers->num_vertices = n_vertices;
-    flowers->list = calloc(n_vertices,sizeof(Vertices));
+    flowers->list = calloc(n_vertices, sizeof(struct Vertices));
     flowers->list->first = NULL;
     int v1, v2;
 
     while (1)
     {
         fscanf(fp, "%d %d", &v1, &v2);
-        if(feof(fp))
+        if (feof(fp))
             return flowers;
 
         // Bloco de codigo que vai encadear a ligacao do primeiro vertice da dupla ordenada (aresta)
 
-        Edge *new_edge = malloc(sizeof(Edge));
+        struct Edge *new_edge = malloc(sizeof(struct Edge));
         new_edge->next = v2;
         new_edge->foward = NULL;
         if (flowers->list[v1 - 1].first == NULL)
@@ -40,7 +41,7 @@ Flower *(cria)()
         else
         {
             flowers->list[v1 - 1].degree += 1;
-            Edge *aux = malloc(sizeof(Edge));
+            struct Edge *aux = malloc(sizeof(struct Edge));
 
             aux = flowers->list[v1 - 1].first;
             while (aux->foward != NULL)
@@ -54,7 +55,7 @@ Flower *(cria)()
 
             // Bloco de codigo que vai encadear a ligacao do segundo vertice da dupla ordenada (aresta)
 
-            Edge *new_edge2 = malloc(sizeof(Edge));
+            struct Edge *new_edge2 = malloc(sizeof(struct Edge));
             new_edge2->next = v1;
             new_edge2->foward = NULL;
             if (flowers->list[v2 - 1].first == NULL)
@@ -66,7 +67,7 @@ Flower *(cria)()
             {
                 flowers->list[v2 - 1].degree += 1;
 
-                Edge *aux = malloc(sizeof(Edge));
+                struct Edge *aux = malloc(sizeof(struct Edge));
 
                 aux = flowers->list[v2 - 1].first;
                 while (aux->foward != NULL)
@@ -81,9 +82,9 @@ Flower *(cria)()
         fclose(fp);
 }
 
-void destroi(Flower *flowers)
+void destruct(struct Flower *flowers)
 {
-    if(flowers == NULL)
+    if (flowers == NULL)
         return;
     int tamanho = flowers->num_vertices;
     for (int i = 0; i < tamanho; i += 1)
@@ -92,7 +93,7 @@ void destroi(Flower *flowers)
             free(flowers->list[i].first);
         else
         {
-            Edge *aux = flowers->list[i].first;
+            struct Edge *aux = flowers->list[i].first;
 
             while (aux->foward != NULL)
             {
@@ -107,13 +108,13 @@ void destroi(Flower *flowers)
     return;
 }
 
-void printar_grafo(Flower *flowers)
+void print_graph(struct Flower *flowers)
 {
     int tamanho = flowers->num_vertices;
     for (int i = 0; i < tamanho; i += 1)
     {
         printf("\nv[%d]", i + 1);
-        Edge *aux = flowers->list[i].first;
+        struct Edge *aux = flowers->list[i].first;
 
         while (aux != NULL)
         {
@@ -124,7 +125,7 @@ void printar_grafo(Flower *flowers)
     }
 }
 
-void fazerTxt(double **matrix) // le a matriz e cria um txt
+void createTxt(double **matrix) // le a matriz e cria um txt
 {
     char buffer[100];
     FILE *fp = fopen("grafo.txt", "w");
@@ -144,17 +145,17 @@ void fazerTxt(double **matrix) // le a matriz e cria um txt
     fclose(fp);
 }
 
-double **cria_tabela()
+double **create_table()
 {
     FILE *fp = fopen("IrisDataset.csv", "r");
     if (fp == NULL)
     {
         return NULL;
     }
-    double maior = 0; // para fazer a normalização
+    double maior = 0; // para fazer a normalizeção
     double menor = 0;
     double dist = 0; // distancia entre nodos
-    double **matrix = calloc(size,sizeof(double *));
+    double **matrix = calloc(size, sizeof(double *));
     if (matrix == NULL)
         return NULL;
     char buffer[100];
@@ -165,15 +166,15 @@ double **cria_tabela()
     double x, y, z, w, esp, x2, y2, z2, w2, esp2;
 
     int i = 0, j = 1;
-    while (i <size)
+    while (i < size)
     {
         fgets(buffer, 100, fp); // Ignorando a linha
         fgetpos(fp, &linha_atual);
         fscanf(fp, "%lf, %lf, %lf, %lf,", &x, &y, &z, &w);
         fgets(buffer, 100, fp); // Ignorando a ultima coluna
-        matrix[i] = calloc(size,sizeof(double));
+        matrix[i] = calloc(size, sizeof(double));
 
-        while (j <size)
+        while (j < size)
         {
 
             fscanf(fp, "%lf, %lf, %lf, %lf,", &x2, &y2, &z2, &w2);
@@ -200,11 +201,11 @@ double **cria_tabela()
         i++;
         j = i + 1;
     }
-    normaliza(matrix, menor, maior);
+    normalize(matrix, menor, maior);
     return matrix;
 }
 
-void normaliza(double **matrix, double menor, double maior)
+void normalize(double **matrix, double menor, double maior)
 {
 
     for (int i = 0; i < size; i++)
@@ -212,6 +213,51 @@ void normaliza(double **matrix, double menor, double maior)
         for (int j = i + 1; j < size; j++)
         {
             matrix[i][j] = (matrix[i][j] - menor) / (maior - menor);
+        }
+    }
+}
+
+int main()
+{
+    double **matrix = NULL;
+    struct descritor *desc = NULL;
+    int escolha = 5;
+    while (1)
+    {
+        printf("Digite 1 para montar a matriz e gerar um arquivo de texto representando o grafo\nDigite 2 para importar o grafo de um arquivo de texto existente\nDigite 3 para printar o grafo\nDigite 0 para sair\n");
+        scanf("%d", &escolha);
+        switch (escolha)
+        {
+        case 1:
+            matrix = create_table();
+            if (matrix == NULL)
+            {
+                printf("Erro ao importar arquivo CSV\n");
+                break;
+            }
+            createTxt(matrix);
+            printf("Sucesso ao criar txt\n");
+            break;
+        case 2:
+            desc = cria();
+            if (desc == NULL)
+                printf("Erro ao importar grafo do arquivo\n");
+            else
+                printf("Grafo importado com sucesso!\n");
+            break;
+        case 3:
+            if (desc == NULL)
+            {
+                printf("Grafo ainda nao foi importado!\n");
+                break;
+            }
+            print_graph(desc);
+            break;
+        case 0:
+            destruct(desc);
+            if (matrix != NULL)
+                free(matrix);
+            return 0;
         }
     }
 }

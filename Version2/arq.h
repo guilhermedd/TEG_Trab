@@ -1,22 +1,25 @@
-typedef struct{
+struct Flower
+{
   int num_vertices;
-  Vertices* list;
-}Flower;
+  struct Vertices *list;
+};
 
-typedef struct{
-    int degree;
-    Edge *first;
-}Vertices;
+struct Vertices
+{
+  int degree;
+  struct Edge *first;
+};
 
-typedef struct{
-    int next;
-    Edge *foward;
-}Edge;
+struct Edge
+{
+  int next;
+  struct Edge *foward;
+};
 
 // struct Flower create *(cria)();
-void destruct(Flower *flowers);
-Flower* distData();
-double **compareValues(Flower* flowers);
-void printing(double **distances);
-void normalization(double **distances, double highest, double lowest);
-void createTxt(double **distances);
+struct create*(cria)();
+void destruct(struct Flower *flowers);
+void print_graph(struct Flower *flowers);
+void createTxt(double **matrix);
+double **create_table();
+void normalize(double **distances, double highest, double lowest);
