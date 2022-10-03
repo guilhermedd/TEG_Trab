@@ -5,7 +5,7 @@
 #define size 150
 // Alunos: Guilherme Diel e Luigi Belló Boscato
 
-struct create *cria()
+struct Flower *cria()
 {
     // Tenta abrir arquivo
     FILE *fp = fopen("grafo.txt", "r");
@@ -220,13 +220,13 @@ void normalize(double **matrix, double menor, double maior)
 int main()
 {
     double **matrix = NULL;
-    struct Flower *desc = NULL;
-    int escolha = 5;
+    struct Flower *flower = NULL;
+    int choice = 5;
     while (1)
     {
         printf("Digite 1 para montar a matriz e gerar um arquivo de texto representando o grafo\nDigite 2 para importar o grafo de um arquivo de texto existente\nDigite 3 para printar o grafo\nDigite 0 para sair\n");
-        scanf("%d", &escolha);
-        switch (escolha)
+        scanf("%d", &choice);
+        switch (choice)
         {
         case 1:
             matrix = create_table();
@@ -239,22 +239,22 @@ int main()
             printf("Sucesso ao criar txt\n");
             break;
         case 2:
-            desc = cria();
-            if (desc == NULL)
+            flower = cria();
+            if (flower == NULL)
                 printf("Erro ao importar grafo do arquivo\n");
             else
                 printf("Grafo importado com sucesso!\n");
             break;
         case 3:
-            if (desc == NULL)
+            if (flower == NULL)
             {
                 printf("Grafo ainda nao foi importado!\n");
                 break;
             }
-            print_graph(desc);
+            print_graph(flower);
             break;
         case 0:
-            destruct(desc);
+            destruct(flower);
             if (matrix != NULL)
                 free(matrix);
             return 0;

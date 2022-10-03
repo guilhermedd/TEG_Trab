@@ -16,8 +16,7 @@ struct Edge
   struct Edge *foward;
 };
 
-// struct Flower create *(cria)();
-struct create*(cria)();
+struct Flower*(cria)();
 void destruct(struct Flower *flowers);
 void print_graph(struct Flower *flowers);
 void createTxt(double **matrix);
