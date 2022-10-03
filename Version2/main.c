@@ -220,7 +220,7 @@ void normalize(double **matrix, double menor, double maior)
 int main()
 {
     double **matrix = NULL;
-    struct descritor *desc = NULL;
+    struct Flower *desc = NULL;
     int escolha = 5;
     while (1)
     {
