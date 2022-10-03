@@ -1,24 +1,21 @@
-struct Flower
-{
-  int num_vertices;
+struct Flower{
+  int vertex_amount;
   struct Vertices *list;
 };
 
-struct Vertices
-{
+struct Vertices{
   int degree;
   struct Edge *first;
 };
 
-struct Edge
-{
+struct Edge{
   int next;
   struct Edge *foward;
 };
 
-struct Flower*(cria)();
+struct Flower *create();
 void destruct(struct Flower *flowers);
 void print_graph(struct Flower *flowers);
-void createTxt(double **matrix);
+void createTxt(double **distances);
 double **create_table();
 void normalize(double **distances, double highest, double lowest);
