@@ -4,9 +4,9 @@ typedef struct {
   double y;
   double z;
   double w;
-  double normalizedValue;
-  double adjacent[];
 } Flower;
 
 Flower* distData();
-void compareValues(Flower* flowers);
+double **compareValues(Flower* flowers);
+void printing(double **distances);
+void normalization(double **distances, double highest, double lowest);
