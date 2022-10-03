@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "arq.h"
+#include "flower.c"
 #define size 150
 
 // Alunos: Guilherme Diel & Luigi Belló Boscato
