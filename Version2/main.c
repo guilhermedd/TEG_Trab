@@ -224,7 +224,7 @@ int main()
     int choice = 5;
     while (1)
     {
-        printf("Digite 1 para montar a matriz e gerar um arquivo de texto representando o grafo\nDigite 2 para importar o grafo de um arquivo de texto existente\nDigite 3 para printar o grafo\nDigite 0 para sair\n");
+        printf("Digite 1 para montar a matriz e gerar um arquivo de texto\nDigite 2 para importar o grafo de um arquivo de texto\nDigite 3 para escrever o grafo\nDigite 0 para sair\n");
         scanf("%d", &choice);
         switch (choice)
         {
@@ -232,7 +232,7 @@ int main()
             matrix = create_table();
             if (matrix == NULL)
             {
-                printf("Erro ao importar arquivo CSV\n");
+                printf("Erro ao importar arquivo\n");
                 break;
             }
             createTxt(matrix);
