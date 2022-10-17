@@ -173,16 +173,12 @@ void normalize(double **distances, double lowest, double highest){
 
 // DFS algorithm
 
-struct node* createNode(int v);
-
 void DFS(struct Graph* graph, int vertex) {
     struct node* adjList = graph->adjLists[vertex];
     struct node* temp = adjList;
 
     graph->visited[vertex] = 1;
     printf("Visited %d \n", vertex);
-    // visited_node[visited] = vertex;
-    // visited++;
     while (temp != NULL) {
     int connectedVertex = temp->vertex;
 
@@ -205,9 +201,7 @@ struct node* createNode(int v) {
 struct Graph* createGraph(int vertices) {
   struct Graph* graph = malloc(sizeof(struct Graph));
   graph->numVertices = vertices;
-
   graph->adjLists = malloc(vertices * sizeof(struct node*));
-
   graph->visited = malloc(vertices * sizeof(int));
 
   int i;
@@ -231,46 +225,16 @@ void addEdge(struct Graph* graph, int src, int dest) {
   graph->adjLists[dest] = newNode;
 }
 
-// Print the graph
-void printGraph(struct Graph* graph) {
-  int v;
-  for (v = 0; v < graph->numVertices; v++) {
-    struct node* temp = graph->adjLists[v];
-    printf("\n Adjacency list of vertex %d\n ", v);
-    while (temp) {
-      printf("%d -> ", temp->vertex);
-      temp = temp->next;
-    }
-    printf("\n");
-  }
-}
-
-int cmpfunc (const void * a, const void * b) {
-   return ( *(int*)a - *(int*)b );
-}
-
 void find_adjacent(double **distances) {
-    char buffer[100];
-    FILE *file = fopen("edges.txt", "w");
     struct Graph* graph = createGraph(size);
-    if (file == NULL) {
-        printf("Error");
-        return;
-    }
-    fprintf(file, "%d\n", size);
     for (int i = 0; i < size; i++) {
         for (int j = i + 1; j < size; j++) {
+            // add edgest to the graph
             if (distances[i][j] <= 0.3) addEdge(graph, i + 1, j + 1);
         }
     }
-
-    // printGraph(graph);
+    // show visited
     DFS(graph, size);
-
-    // qsort(visited_node, 5, sizeof(int), cmpfunc);
-
-
-    fclose(file);
 }
 
 int main(){
@@ -313,6 +277,11 @@ int main(){
             print_graph(flower);
             break;
         case 4:
+            distances = create_table();
+            if (distances == NULL) {
+                printf("Erro ao importar arquivo\n");
+                break;
+            }
             find_adjacent(distances);
             break;
 
