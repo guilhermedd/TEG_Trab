@@ -171,79 +171,13 @@ void normalize(double **distances, double lowest, double highest){
     }
 }
 
-// DFS algorithm
-
-void DFS(struct Graph* graph, int vertex) {
-    struct node* adjList = graph->adjLists[vertex];
-    struct node* temp = adjList;
-
-    graph->visited[vertex] = 1;
-    printf("Visited %d \n", vertex);
-    while (temp != NULL) {
-    int connectedVertex = temp->vertex;
-
-    if (graph->visited[connectedVertex] == 0) {
-        DFS(graph, connectedVertex);
-    }
-    temp = temp->next;
-    }
-}
-
-// Create a node
-struct node* createNode(int v) {
-  struct node* newNode = malloc(sizeof(struct node));
-  newNode->vertex = v;
-  newNode->next = NULL;
-  return newNode;
-}
-
-// Create graph
-struct Graph* createGraph(int vertices) {
-  struct Graph* graph = malloc(sizeof(struct Graph));
-  graph->numVertices = vertices;
-  graph->adjLists = malloc(vertices * sizeof(struct node*));
-  graph->visited = malloc(vertices * sizeof(int));
-
-  int i;
-  for (i = 0; i < vertices; i++) {
-    graph->adjLists[i] = NULL;
-    graph->visited[i] = 0;
-  }
-  return graph;
-}
-
-// Add edge
-void addEdge(struct Graph* graph, int src, int dest) {
-  // Add edge from src to dest
-  struct node* newNode = createNode(dest);
-  newNode->next = graph->adjLists[src];
-  graph->adjLists[src] = newNode;
-
-  // Add edge from dest to src
-  newNode = createNode(src);
-  newNode->next = graph->adjLists[dest];
-  graph->adjLists[dest] = newNode;
-}
-
-void find_adjacent(double **distances) {
-    struct Graph* graph = createGraph(size);
-    for (int i = 0; i < size; i++) {
-        for (int j = i + 1; j < size; j++) {
-            // add edgest to the graph
-            if (distances[i][j] <= 0.3) addEdge(graph, i + 1, j + 1);
-        }
-    }
-    // show visited
-    DFS(graph, size);
-}
-
 int main(){
     double **distances = NULL;
     struct Flower *flower = NULL;
     int choice = -1;
 
     while (1) {
-        printf("Digite 0 para sair\nDigite 1 para montar a matriz e gerar um arquivo de texto\nDigite 2 para importar o grafo de um arquivo de texto\nDigite 3 para escrever o grafo\nDigite 4 para achar a lista de adjacencias\n");
+        printf("Digite 0 para sair\nDigite 1 para montar a matriz e gerar um arquivo de texto\nDigite 2 para importar o grafo de um arquivo de texto\nDigite 3 para escrever o grafo\n");
         scanf("%d", &choice);
         switch (choice) {
         case 0:
@@ -275,14 +209,6 @@ int main(){
                 break;
             }
             print_graph(flower);
-            break;
-        case 4:
-            distances = create_table();
-            if (distances == NULL) {
-                printf("Erro ao importar arquivo\n");
-                break;
-            }
-            find_adjacent(distances);
             break;
 
         }
