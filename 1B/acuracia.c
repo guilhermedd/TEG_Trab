@@ -1,8 +1,7 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 
 // Alunos: Guilherme Diel & Luigi Belló Boscato
-
 
 /*
      Verdadeiro Positivo (mesma especie e iguais) mesmo grupo             Falso Negativo (especies diferentes porem iguais) deveria estar em algum grupo, porem nao esta
@@ -19,21 +18,20 @@
 
      5 6
      
-
      -----
+
      1 2
      1 5 -> 1 50
      2 4 -> 2 15
      51 52 -> 51 55 
-     
 */
 
 double calcAcuracia() {
      FILE *file = fopen("edges.txt", "r");
      char aux[100];
-     int edge1, edge2, prevEdge1 = 0, prevEdge2 = 0, pinto;
+     int edge1, edge2, prevEdge1 = 0, prevEdge2 = 0;
      int TP = 0, TN = 0, FP = 0, FN = 0;
-     double acuracia;
+     float acuracia = 0.0;
 
      fscanf(file, "%i", &edge1);
      do {
@@ -50,7 +48,7 @@ double calcAcuracia() {
                     */
                     FN += 50 - prevEdge2;
                } else if (edge1 != prevEdge1 && edge2 != edge1 + 1) {
-                    //  Se mudar de A1(aresta 1) entre a anterior e a atual (Mudar de planta) e a primeira A2 for diferente de A1 + 1 ela não comecou onde deveria (por exemplo comecar a lisa com: 1 3 em vez de 1 2)
+                    //  Se mudar de A1 (aresta 1) entre a anterior e a atual (Mudar de planta) e a primeira A2 for diferente de A1 + 1 ela não comecou onde deveria (por exemplo comecar a lisa com: 1 3 em vez de 1 2)
                     FN += edge2 - (edge1 + 1);
                }
           }
@@ -63,8 +61,8 @@ double calcAcuracia() {
                /* Ex:
                53 54
                53 57 <- falta (53 55), (53 56)
-               
                */
+
                if ((prevEdge2 <= 50 && edge2 <= 50) || (prevEdge2 > 50 && edge2 > 50)) {
                     if (edge1 == prevEdge1 && edge2 != prevEdge2 + 1) { 
                          FN += edge2 - (prevEdge2 + 1);
@@ -72,23 +70,21 @@ double calcAcuracia() {
                }
 
           } else { // Se pertencem a grupos diferentes -> Falso Positivo += 1
-               FP ++;
+               FP++;
           }
-
 
           prevEdge1 = edge1;
           prevEdge2 = edge2;
-
      } while (fgets(aux, sizeof(aux), file));
-     printf("TP: %i\nFN: %i\nFP: %i", TP, FN, FP);
 
+     acuracia = ((double)(TP + TN)/(double)(FN + FP + TP + TN));
+     printf("TP: %d\nTN: %d\nFN: %d\nFP: %d", TP, TN, FN, FP);
 
-     acuracia = (TP + TN) / (TP + FP + TN + FN);
      return acuracia;
 }
 
 int main() {
      double acuracia = calcAcuracia();
-     printf("\nAcuracia:  %f",acuracia);
+     printf("\nAcuracia: %lf\n", acuracia);
      return 0;
 }
