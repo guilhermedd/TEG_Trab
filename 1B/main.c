@@ -171,13 +171,45 @@ void normalize(double **distances, double lowest, double highest){
     }
 }
 
+double calcAcuracia() {
+    FILE *file = fopen("edges.txt", "r");
+    char aux[100];
+    int edge1, edge2;
+    int TP = 0, TN = 0, FP = 0, FN = 0, totalEdges = 0;
+    float acuracia = 0.0;
+
+    fscanf(file, "%i", &edge1);
+    do {
+        fscanf(file, "%i %i", &edge1, &edge2);
+        if(edge1 <= 50) {
+            if(edge2 <= 50) {
+                TP++;
+            } else {
+                FP++;
+            }
+        }
+    } while (fgets(aux, sizeof(aux), file));
+
+    for(int i = 100; i < 150; i++) {
+      totalEdges += i;
+    }
+
+    TN = totalEdges - (TP + FP + FN);
+
+    acuracia = ((double)(TP + TN)/(double)(FN + FP + TP + TN));
+    printf("\nTP: %d\nTN: %d\nFN: %d\nFP: %d", TP, TN, FN, FP);
+
+    return acuracia;
+}
+
 int main(){
     double **distances = NULL;
     struct Flower *flower = NULL;
+    double acuracia = 0.0;
     int choice = -1;
 
     while (1) {
-        printf("Digite 0 para sair\nDigite 1 para montar a matriz e gerar um arquivo de texto\nDigite 2 para importar o grafo de um arquivo de texto\nDigite 3 para escrever o grafo\n");
+        printf("Digite 0 para sair\nDigite 1 para montar a matriz e gerar um arquivo de texto\nDigite 2 para importar o grafo de um arquivo de texto\nDigite 3 para escrever o grafo\nDigite 4 para analisar as arestas e calcular a acurácia\n");
         scanf("%d", &choice);
         switch (choice) {
         case 0:
@@ -211,6 +243,10 @@ int main(){
             print_graph(flower);
             break;
 
+        case 4:
+            acuracia = calcAcuracia(flower);
+            printf("\nAcuracia: %lf\n\n", acuracia);
+            break;
         }
     }
 }
