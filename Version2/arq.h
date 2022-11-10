@@ -19,3 +19,4 @@ void print_graph(struct Flower *flowers);
 void createTxt(double **distances);
 double **create_table();
 void normalize(double **distances, double highest, double lowest);
+void accuracy(struct Flower *flowers);

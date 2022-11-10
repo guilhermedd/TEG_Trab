@@ -88,7 +88,7 @@ void destruct(struct Flower *flowers) {
 
 void print_graph(struct Flower *flowers) {
     int vertex_amount = flowers->vertex_amount;
-    for (int i = 0; i < 50; i += 1) {
+    for (int i = 0; i < vertex_amount; i += 1) {
         printf("\nv[%d]", i + 1);
         struct Edge *aux = flowers->list[i].first;
 
@@ -96,32 +96,8 @@ void print_graph(struct Flower *flowers) {
             printf("-%d", aux->next);
             aux = aux->foward;
         }
+        printf("\n");
     }
-}
-// Acuracia
-void accuracy(struct Flower *flowers)
-{
-    int TP = 0, TN = 0, FP = 0, FN = 0, totalEdges = 0;
-    float acuracia = 0;
-    for (int i = 0; i < 50; i++)
-    {
-        struct Edge *aux = flowers->list[i].first; // primeiro vértice de cada ramo
-        while (aux != NULL)
-        {
-            if (aux->next <= 50 && aux->next > i)
-                TP++;
-            if (aux->next > 50) FP++;
-            aux = aux->foward;
-        }
-    }
-    for (int i = 100; i < 150; i++)
-    {
-        totalEdges += i;
-    }
-
-    TN = totalEdges - (TP + FP + FN);
-    acuracia = ((double)(TP + TN) / (double)(FN + FP + TP + TN));
-    printf("\nAcuracia: %lf\nTP: %d\nTN: %d\nFN: %d\nFP: %d\n",acuracia, TP, TN, FN, FP);
 }
 
 // Le a matriz e cria um .txt 
@@ -236,47 +212,41 @@ int main(){
         printf("Digite 0 para sair\nDigite 1 para montar a matriz e gerar um arquivo de texto\nDigite 2 para importar o grafo de um arquivo de texto\nDigite 3 para escrever o grafo\nDigite 4 para analisar as arestas e calcular a acurácia\n");
         scanf("%d", &choice);
         switch (choice) {
-            case 0:
-                destruct(flower);
-                if (distances != NULL) free(distances);
-                return 0;
-            case 1:
-                distances = create_table();
-                if (distances == NULL) {
-                    printf("Erro ao importar arquivo\n");
-                    break;
-                }
-                createTxt(distances);
-                printf("Sucesso ao criar txt\n");
+        case 0:
+            destruct(flower);
+            if (distances != NULL) free(distances);
+            return 0;
+        case 1:
+            distances = create_table();
+            if (distances == NULL) {
+                printf("Erro ao importar arquivo\n");
                 break;
+            }
+            createTxt(distances);
+            printf("Sucesso ao criar txt\n");
+            break;
 
-            case 2:
-                flower = create();
-                if (flower == NULL) {
-                    printf("Erro ao importar grafo do arquivo\n");
-                } else {
-                    printf("Grafo importado com sucesso!\n");
-                }
-                break;
+        case 2:
+            flower = create();
+            if (flower == NULL) {
+                printf("Erro ao importar grafo do arquivo\n");
+            } else {
+                printf("Grafo importado com sucesso!\n");
+            }
+            break;
 
-            case 3:
-                if (flower == NULL) {
-                    printf("Grafo ainda nao foi importado!\n");
-                    break;
-                }
-                print_graph(flower);
-                accuracy(flower);
+        case 3:
+            if (flower == NULL) {
+                printf("Grafo ainda nao foi importado!\n");
                 break;
+            }
+            print_graph(flower);
+            break;
 
-            case 4:
-                
-                if (flower == NULL)
-                {
-                    printf("Grafo ainda nao foi importado!\n");
-                    break;
-                }
-                accuracy(flower);
-                break;
+        case 4:
+            acuracia = calcAcuracia(flower);
+            printf("\nAcuracia: %lf\n\n", acuracia);
+            break;
         }
     }
 }

@@ -88,7 +88,7 @@ void destruct(struct Flower *flowers) {
 
 void print_graph(struct Flower *flowers) {
     int vertex_amount = flowers->vertex_amount;
-    for (int i = 0; i < vertex_amount; i += 1) {
+    for (int i = 0; i < vertex_amount; i ++) {
         printf("\nv[%d]", i + 1);
         struct Edge *aux = flowers->list[i].first;
 
@@ -99,6 +99,7 @@ void print_graph(struct Flower *flowers) {
         printf("\n");
     }
 }
+
 
 // Le a matriz e cria um .txt 
 void createTxt(double **distances) {
